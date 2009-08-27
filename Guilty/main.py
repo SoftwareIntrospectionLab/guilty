@@ -22,23 +22,8 @@ from repositoryhandler.backends.watchers import LS, BLAME
 from Parser import create_parser
 from TextOutputDevice import TextOutputDevice
 from optparse import OptionParser
-import os, re
-
-def uri_is_remote (uri):
-    match = re.compile ("^.*://.*$").match (uri)
-    if match is None:
-        return False
-    else:
-        return not uri.startswith ("file://")
-
-def uri_to_filename (uri):
-    if uri_is_remote (uri):
-        return None
-
-    if uri.startswith ("file://"):
-        return uri[uri.find ("file://") + len ("file://"):]
-
-    return uri
+from utils import uri_is_remote, uri_to_filename, printerr
+import os
 
 def blame (filename, args):
     repo, uri, out = args
