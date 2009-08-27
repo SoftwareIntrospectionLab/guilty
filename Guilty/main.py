@@ -59,6 +59,9 @@ def main (args):
     parser = OptionParser (usage='%prog [ options ... ] URI [ FILES ]',
                            description='Analyze repository modifications')
     parser.disable_interspersed_args()
+    parser.add_option ('-g', '--debug', dest='debug',
+                       action="store_true", default=False,
+                       help="Run in debug mode")
     parser.add_option ('-r', '--revision', dest='revision',
                        metavar='REV',
                        help='Revision to analyze (HEAD)')
@@ -68,12 +71,13 @@ def main (args):
 
     options, args = parser.parse_args(args)
 
-    import repositoryhandler.backends
-    repositoryhandler.backends.DEBUG = True
-
     if not args:
         parser.error("missing required repository URI")
         return 1
+
+    if options.debug:
+        import repositoryhandler.backends
+        repositoryhandler.backends.DEBUG = True
 
     uri = args[0]
     files = args[1:]
