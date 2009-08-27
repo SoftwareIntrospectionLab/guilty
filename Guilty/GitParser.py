@@ -21,6 +21,7 @@ from Parser import Parser
 from Blame import BlameLine
 
 import re
+import datetime, time
 
 class GitParser (Parser):
 
@@ -43,7 +44,7 @@ class GitParser (Parser):
         bl.line = int (match.group (5))
         bl.rev = match.group (1)
         bl.author = match.group (3)
-        bl.date = match.group (4)
+        bl.date = datetime.datetime (* (time.gmtime (int (match.group (4)))[0:6]))
         filename = match.group (2)
         if filename != self.filename:
             bl.file = filename
