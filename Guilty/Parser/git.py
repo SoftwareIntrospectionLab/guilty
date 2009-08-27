@@ -17,8 +17,8 @@
 # Authors: Carlos Garcia Campos <carlosgc@libresoft.es>
 #
 
-from Parser import Parser
-from Blame import BlameLine
+from Guilty.Parser import Parser, register_parser
+from Guilty.Blame import BlameLine
 
 import re
 import datetime, time
@@ -45,6 +45,8 @@ class GitParser (Parser):
             bl.file = filename
 
         self.out.line (bl)
+
+register_parser ('git', GitParser)
 
 if __name__ == '__main__':
     import sys, os

@@ -1,4 +1,4 @@
-# Copyright (C) 2009  GSyC/LibreSoft
+# Copyright (C) 2007  GSyC/LibreSoft
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,8 +14,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-# Authors: Carlos Garcia Campos <carlosgc@libresoft.es>
+# Authors: Carlos Garcia Campos <carlosgc@gsyc.escet.urjc.es>
 #
+
+__all__ = [
+        'Parser',
+        'create_parser',
+        'register_parser'
+]
+
+class ParserUnknownError (Exception):
+    '''Unkown parser type'''
 
 class Parser:
 
@@ -41,3 +50,28 @@ class Parser:
             return
         self.out.end_file ()
         self.filename = None
+
+_parsers = {}
+def register_parser (name, klass):
+    _parsers[name] = klass
+
+def _get_parser (name):
+    error = None
+    if name not in _parsers:
+        try:
+            __import__ ('Guilty.Parser.%s' % name)
+        except ImportError, e:
+            error = e
+
+    if name not in _parsers:
+        if error is None:
+            error = 'unknown error'
+        else:
+            error = str(error)
+        raise ParserUnknownError ('Parser type %s not registered: %s' % (name, error))
+
+    return _parsers[name]
+
+def create_parser (name, filename):
+    klass = _get_parser (name)
+    return klass (filename)

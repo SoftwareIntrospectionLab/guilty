@@ -19,7 +19,7 @@
 
 from repositoryhandler.backends import create_repository, create_repository_from_path, RepositoryUnknownError
 from repositoryhandler.backends.watchers import LS, BLAME
-from GitParser import GitParser
+from Parser import create_parser
 from TextOutputDevice import TextOutputDevice
 from optparse import OptionParser
 import os, re
@@ -39,13 +39,6 @@ def uri_to_filename (uri):
         return uri[uri.find ("file://") + len ("file://"):]
 
     return uri
-
-_parsers = {
-    'git' : GitParser
-}
-
-def create_parser (repo_type, filename):
-    return _parsers[repo_type] (filename)
 
 def blame (filename, args):
     repo, uri, out = args
