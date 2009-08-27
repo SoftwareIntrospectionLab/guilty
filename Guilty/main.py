@@ -19,7 +19,7 @@
 
 from repositoryhandler.backends import create_repository, create_repository_from_path, RepositoryUnknownError
 from repositoryhandler.backends.watchers import LS, BLAME
-from Parser import create_parser
+from Parser import create_parser, ParserUnknownError
 from TextOutputDevice import TextOutputDevice
 from optparse import OptionParser
 from utils import uri_is_remote, uri_to_filename, printerr
@@ -89,6 +89,17 @@ def main (args):
         if repo.get_last_revision (uri) is None:
             printerr ("URI %s doesn't seem to point to a valid svn repository", (uri,))
             return 1
+
+    # Check we have a parser for the given repo
+    try:
+        p = create_parser (repo.get_type (), 'foo')
+    except ParserUnknownError:
+        printerr ("%s repositories are not supported by guilty (yet)", (repo.get_type (),))
+        return 1
+    except Exception, e:
+        printerr ("Unknown error creating parser for repository %s (%s)", (repo.get_uri (), str (e)))
+        return 1
+    del p
 
     out = TextOutputDevice ()
     if files:
