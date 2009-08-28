@@ -40,6 +40,23 @@ def blame (filename, args):
     p.end ()
     repo.remove_watch (BLAME, wid)
 
+def cvs_proxy_blame (filename, args):
+    path = filename.strip (' \n')
+    if not path:
+        return
+
+    if path[-1] == ':':
+        args[-1][0] = path[:-1]
+        return
+
+    cdir = args[-1][0]
+    if not cdir or cdir == '.':
+        filename = path
+    else:
+        filename = os.path.join (cdir, path)
+
+    blame (filename, args[:-1])
+
 def main (args):
     parser = OptionParser (usage='%prog [ options ... ] URI [ FILES ]',
                            description='Analyze repository modifications')
@@ -106,7 +123,13 @@ def main (args):
         for file in files:
             blame (file, (repo, path or uri, out))
     else:
-        repo.add_watch (LS, blame, (repo, path or uri, out))
+        if repo.get_type () == 'cvs':
+            # CVS ls doesn't build the paths,
+            # so we have to do it before calling blame
+            cdir = [""]
+            repo.add_watch (LS, cvs_proxy_blame, (repo, path or uri, out, cdir))
+        else:
+            repo.add_watch (LS, blame, (repo, path or uri, out))
         repo.ls (path or uri)
 
     return 0
