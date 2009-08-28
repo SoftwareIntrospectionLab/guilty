@@ -28,8 +28,8 @@ URI is the only required parameter and can be a checked out directory,
 or a remote URL pointing to a repository. Guilty will analyze the list
 of files provided after the URI or it will read files from stdin if
 '-' is used instead of filenames. File paths should be relative to the
-repository root. When analyzing a single file the URI can point
-directly to such omitting then the file list. If no files are provided
+given repository URI. When analyzing a single file the URI can point
+directly to such s file omitting then the file list. If no files are provided
 and URI points to a directory, all the files contained in the
 directory (and recursively in its subdirectories) will be
 analyzed.

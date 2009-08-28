@@ -29,6 +29,9 @@ def blame (filename, args):
     repo, uri, out = args
     filename = filename.strip (' \n')
 
+    if filename[-1] == '/':
+        return
+
     p = create_parser (repo.get_type (), filename)
     p.set_output_device (out)
 
@@ -45,17 +48,37 @@ def cvs_proxy_blame (filename, args):
     if not path:
         return
 
+    repo, uri, out, cdir = args
     if path[-1] == ':':
-        args[-1][0] = path[:-1]
+        cdir[0] = path[:-1]
         return
 
-    cdir = args[-1][0]
-    if not cdir or cdir == '.':
+    if not cdir[0] or cdir[0] == '.':
         filename = path
     else:
-        filename = os.path.join (cdir, path)
+        filename = os.path.join (cdir[0], path)
+
+    if os.path.isdir (os.path.join (uri, filename)):
+        return
 
     blame (filename, args[:-1])
+
+def git_proxy_blame (filename, args):
+    path = filename.strip (' \n')
+    if not path:
+        return
+
+    repo, uri, out = args
+
+    root = uri
+    while not os.path.isdir (os.path.join (root, ".git")):
+        root = os.path.dirname (root)
+
+    prefix = uri[len (root):]
+    if prefix:
+        filename = filename[len (prefix.strip ('/')):]
+
+    blame (filename.strip ('/'), args)
 
 def main (args):
     parser = OptionParser (usage='%prog [ options ... ] URI [ FILES ]',
@@ -128,6 +151,10 @@ def main (args):
             # so we have to do it before calling blame
             cdir = [""]
             repo.add_watch (LS, cvs_proxy_blame, (repo, path or uri, out, cdir))
+        elif repo.get_type () == 'git':
+            # In git paths are relative to the root
+            # we want paths relative to the provided uri
+            repo.add_watch (LS, git_proxy_blame, (repo, path or uri, out))
         else:
             repo.add_watch (LS, blame, (repo, path or uri, out))
         repo.ls (path or uri)
