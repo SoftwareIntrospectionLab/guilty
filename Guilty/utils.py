@@ -50,6 +50,16 @@ def uri_to_filename (uri):
 
     return uri
 
+def svn_uri_is_file (uri):
+    from repositoryhandler.backends.svn import get_info
+
+    try:
+        type = get_info (uri)['node kind']
+    except:
+        return False
+
+    return type != 'directory'
+
 def printout (str = '\n', args = None):
     if args is not None:
         str = str % tuple (to_utf8 (arg) for arg in args)
