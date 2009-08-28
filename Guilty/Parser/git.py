@@ -17,6 +17,10 @@
 # Authors: Carlos Garcia Campos <carlosgc@libresoft.es>
 #
 
+if __name__ == '__main__':
+    import sys
+    sys.path.insert (0, '../../')
+
 from Guilty.Parser import Parser, register_parser
 from Guilty.Blame import BlameLine
 
@@ -50,8 +54,8 @@ register_parser ('git', GitParser)
 
 if __name__ == '__main__':
     import sys, os
-    from TextOutputDevice import TextOutputDevice
-    from Command import Command
+    from Guilty.TextOutputDevice import TextOutputDevice
+    from Guilty.Command import Command
 
     filename = sys.argv[1]
     p = GitParser (filename)
