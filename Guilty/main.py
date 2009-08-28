@@ -22,7 +22,7 @@ from repositoryhandler.backends.watchers import LS, BLAME
 from Parser import create_parser, ParserUnknownError
 from TextOutputDevice import TextOutputDevice
 from optparse import OptionParser
-from utils import uri_is_remote, uri_to_filename, printerr
+from utils import uri_is_remote, uri_to_filename, svn_uri_is_file, printerr
 import os
 
 def blame (filename, args):
@@ -145,6 +145,10 @@ def main (args):
     if files:
         for file in files:
             blame (file, (repo, path or uri, out))
+    elif path and os.path.isfile (path):
+        blame (os.path.basename (path), (repo, os.path.dirname (path), out))
+    elif not path and svn_uri_is_file (uri):
+        blame (os.path.basename (uri), (repo, os.path.dirname (uri), out))
     else:
         if repo.get_type () == 'cvs':
             # CVS ls doesn't build the paths,
