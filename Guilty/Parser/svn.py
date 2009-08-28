@@ -27,11 +27,6 @@ class SVNParser (Parser):
 
     line_pattern = re.compile ("^[\t ]+([0-9]+)[\t ]+(.*) (\d\d\d\d)[/-](\d\d)[/-](\d\d) (\d\d):(\d\d):(\d\d) ([+-]\d\d\d\d) .*$")
 
-    def __init__ (self, filename):
-        Parser.__init__ (self, filename)
-
-        self.filename = filename
-
     def _parse_line (self, line):
         if not line:
             return
