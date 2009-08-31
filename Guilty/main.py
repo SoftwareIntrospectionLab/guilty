@@ -26,7 +26,7 @@ from utils import uri_is_remote, uri_to_filename, svn_uri_is_file, printerr
 import os
 
 def blame (filename, args):
-    repo, uri, out = args
+    repo, uri, out, opts = args
     filename = filename.strip (' \n')
 
     if filename[-1] == '/':
@@ -39,7 +39,9 @@ def blame (filename, args):
         p.feed (line)
 
     wid = repo.add_watch (BLAME, feed, p)
-    repo.blame (os.path.join (uri, filename))
+    repo.blame (os.path.join (uri, filename),
+                rev = opts.revision,
+                mc = not opts.fast)
     p.end ()
     repo.remove_watch (BLAME, wid)
 
@@ -48,7 +50,7 @@ def cvs_proxy_blame (filename, args):
     if not path:
         return
 
-    repo, uri, out, cdir = args
+    repo, uri, out, opts, cdir = args
     if path[-1] == ':':
         cdir[0] = path[:-1]
         return
@@ -68,7 +70,7 @@ def git_proxy_blame (filename, args):
     if not path:
         return
 
-    repo, uri, out = args
+    repo, uri, out, opts = args
 
     root = uri
     while not os.path.isdir (os.path.join (root, ".git")):
@@ -146,21 +148,21 @@ def main (args):
         for file in files:
             blame (file, (repo, path or uri, out))
     elif path and os.path.isfile (path):
-        blame (os.path.basename (path), (repo, os.path.dirname (path), out))
+        blame (os.path.basename (path), (repo, os.path.dirname (path), out, options))
     elif not path and svn_uri_is_file (uri):
-        blame (os.path.basename (uri), (repo, os.path.dirname (uri), out))
+        blame (os.path.basename (uri), (repo, os.path.dirname (uri), out, options))
     else:
         if repo.get_type () == 'cvs':
             # CVS ls doesn't build the paths,
             # so we have to do it before calling blame
             cdir = [""]
-            repo.add_watch (LS, cvs_proxy_blame, (repo, path or uri, out, cdir))
+            repo.add_watch (LS, cvs_proxy_blame, (repo, path or uri, out, options, cdir))
         elif repo.get_type () == 'git':
             # In git paths are relative to the root
             # we want paths relative to the provided uri
-            repo.add_watch (LS, git_proxy_blame, (repo, path or uri, out))
+            repo.add_watch (LS, git_proxy_blame, (repo, path or uri, out, options))
         else:
-            repo.add_watch (LS, blame, (repo, path or uri, out))
-        repo.ls (path or uri)
+            repo.add_watch (LS, blame, (repo, path or uri, out, options))
+        repo.ls (path or uri, options.revision)
 
     return 0
