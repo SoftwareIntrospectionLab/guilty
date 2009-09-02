@@ -96,7 +96,8 @@ def main (args):
                        action="store_true", default=False,
                        help="Run faster but moves and copies are not detected")
     parser.add_option ('-o', '--output', dest='output',
-                       help='Output type [text|db|xml|csv] (text)')
+                       default = 'text',
+                       help='Output type [text|db|xml|csv] (%default)')
 
     options, args = parser.parse_args(args)
 
