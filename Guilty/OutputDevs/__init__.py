@@ -23,6 +23,9 @@ __all__ = [
     'register_output_device'
 ]
 
+class OutputDeviceError (Exception):
+    '''Generic OutputDeviceError'''
+
 class OutputDeviceUnknownError (Exception):
     '''Unkown output device type'''
 
