@@ -28,6 +28,9 @@ class OutputDeviceUnknownError (Exception):
 
 class OutputDevice:
 
+    def __init__ (self, options):
+        pass
+
     def start_file (self, filename):
         raise NotImplementedError
 
@@ -58,6 +61,6 @@ def _get_output_device (name):
 
     return _devs[name]
 
-def create_output_device (name):
+def create_output_device (name, opts):
     klass = _get_output_device (name)
-    return klass ()
+    return klass (opts)

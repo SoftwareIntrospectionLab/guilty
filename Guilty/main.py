@@ -82,6 +82,22 @@ def git_proxy_blame (filename, args):
 
     blame (filename.strip ('/'), args)
 
+def add_outputs_options (parser):
+    thisdir = os.path.abspath (os.path.dirname (__file__))
+
+    for fname in os.listdir (os.path.join (thisdir, 'OutputDevs')):
+        name, ext = os.path.splitext (fname)
+        if not ext == '.py':
+            continue
+
+        try:
+            module = __import__ ("Guilty.OutputDevs.%s" % name, None, None, ['add_options'])
+            module.add_options (parser)
+        except ImportError:
+            continue
+        except AttributeError:
+            continue
+
 def main (args):
     parser = OptionParser (usage='%prog [ options ... ] URI [ FILES ]',
                            description='Analyze repository modifications')
@@ -98,6 +114,7 @@ def main (args):
     parser.add_option ('-o', '--output', dest='output',
                        default = 'text',
                        help='Output type [text|db|xml|csv] (%default)')
+    add_outputs_options (parser)
 
     options, args = parser.parse_args(args)
 
@@ -147,7 +164,7 @@ def main (args):
     del p
 
     try:
-        out = create_output_device (options.output)
+        out = create_output_device (options.output, options)
     except OutputDeviceUnknownError:
         printerr ("Output type %s is not supported by guilty", (options.output,))
         return 1
