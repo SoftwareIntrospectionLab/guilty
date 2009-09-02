@@ -95,6 +95,8 @@ def main (args):
     parser.add_option ('-f', '--fast', dest='fast',
                        action="store_true", default=False,
                        help="Run faster but moves and copies are not detected")
+    parser.add_option ('-o', '--output', dest='output',
+                       help='Output type [text|db|xml|csv] (text)')
 
     options, args = parser.parse_args(args)
 
@@ -144,12 +146,12 @@ def main (args):
     del p
 
     try:
-        out = create_output_device ('text')
+        out = create_output_device (options.output)
     except OutputDeviceUnknownError:
-        printerr ("Output type %s is not supported by guilty", ('text',))
+        printerr ("Output type %s is not supported by guilty", (options.output,))
         return 1
     except Exception, e:
-        printerr ("Unknown error creating output %s", ('text',))
+        printerr ("Unknown error creating output %s", (options.output,))
         return 1
 
     if files:
