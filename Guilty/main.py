@@ -20,7 +20,7 @@
 from repositoryhandler.backends import create_repository, create_repository_from_path, RepositoryUnknownError
 from repositoryhandler.backends.watchers import LS, BLAME
 from Parser import create_parser, ParserUnknownError
-from TextOutputDevice import TextOutputDevice
+from OutputDevs import create_output_device, OutputDeviceUnknownError
 from optparse import OptionParser
 from utils import uri_is_remote, uri_to_filename, svn_uri_is_file, printerr
 import os
@@ -143,7 +143,15 @@ def main (args):
         return 1
     del p
 
-    out = TextOutputDevice ()
+    try:
+        out = create_output_device ('text')
+    except OutputDeviceUnknownError:
+        printerr ("Output type %s is not supported by guilty", ('text',))
+        return 1
+    except Exception, e:
+        printerr ("Unknown error creating output %s", ('text',))
+        return 1
+
     if files:
         for file in files:
             blame (file, (repo, path or uri, out))

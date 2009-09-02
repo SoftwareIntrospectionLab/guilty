@@ -17,7 +17,7 @@
 # Authors: Carlos Garcia Campos <carlosgc@libresoft.es>
 #
 
-from OutputDevice import OutputDevice
+from Guilty.OutputDevs import OutputDevice, register_output_device
 
 class TextOutputDevice (OutputDevice):
 
@@ -30,3 +30,5 @@ class TextOutputDevice (OutputDevice):
 
     def end_file (self):
         print
+
+register_output_device ('text', TextOutputDevice)

@@ -17,6 +17,15 @@
 # Authors: Carlos Garcia Campos <carlosgc@libresoft.es>
 #
 
+__all__ = [
+    'OutputDevice',
+    'create_output_device',
+    'register_output_device'
+]
+
+class OutputDeviceUnknownError (Exception):
+    '''Unkown output device type'''
+
 class OutputDevice:
 
     def start_file (self, filename):
@@ -27,3 +36,28 @@ class OutputDevice:
 
     def end_file (self):
         raise NotImplementedError
+
+_devs = {}
+def register_output_device (name, klass):
+    _devs[name] = klass
+
+def _get_output_device (name):
+    error = None
+    if name not in _devs:
+        try:
+            __import__ ('Guilty.OutputDevs.%s' % name)
+        except ImportError, e:
+            error = e
+
+    if name not in _devs:
+        if error is None:
+            error = 'unknown error'
+        else:
+            error = str(error)
+        raise OutputDeviceUnknownError ('Output type %s not registered: %s' % (name, error))
+
+    return _devs[name]
+
+def create_output_device (name):
+    klass = _get_output_device (name)
+    return klass ()
