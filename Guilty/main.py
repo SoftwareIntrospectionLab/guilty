@@ -172,7 +172,7 @@ def main (args):
         printerr (str(e))
         return 1
     except Exception, e:
-        printerr ("Unknown error creating output %s", (options.output,))
+        printerr ("Unknown error creating output %s: %s", (options.output,str(e)))
         return 1
 
     if files:
