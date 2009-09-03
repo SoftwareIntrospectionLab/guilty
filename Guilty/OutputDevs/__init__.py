@@ -34,6 +34,9 @@ class OutputDevice:
     def __init__ (self, options):
         pass
 
+    def begin (self):
+        pass
+
     def start_file (self, filename):
         raise NotImplementedError
 
@@ -42,6 +45,9 @@ class OutputDevice:
 
     def end_file (self):
         raise NotImplementedError
+
+    def end (self):
+        pass
 
 _devs = {}
 def register_output_device (name, klass):

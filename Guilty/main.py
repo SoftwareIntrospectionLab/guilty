@@ -175,6 +175,12 @@ def main (args):
         printerr ("Unknown error creating output %s: %s", (options.output,str(e)))
         return 1
 
+    try:
+        out.begin ()
+    except OutputDeviceError, e:
+        printerr (str(e))
+        return 1
+
     if files:
         for file in files:
             blame (file, (repo, path or uri, out))
@@ -195,5 +201,7 @@ def main (args):
         else:
             repo.add_watch (LS, blame, (repo, path or uri, out, options))
         repo.ls (path or uri, options.revision)
+
+    out.end ()
 
     return 0
