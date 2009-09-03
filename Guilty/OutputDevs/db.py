@@ -20,12 +20,16 @@
 from Guilty.OutputDevs import OutputDevice, register_output_device, OutputDeviceError
 from optparse import OptionValueError
 from Guilty.utils import to_utf8, printdbg
+from Guilty.Config import Config
 
 def _check_and_store (option, opt_str, value, parser):
-    if not parser.values.output:
+    try:
+        output = parser.values.output
+    except AttributeError:
         raise OptionValueError ("database specific options must go after -o option")
-    if parser.values.output != 'db':
-        raise OptionValueError ("invalid option %s for output %s" % (opt_str, parser.values.output))
+
+    if output != 'db':
+        raise OptionValueError ("invalid option %s for output %s" % (opt_str, output))
 
     setattr (parser.values, option.dest, value)
 
@@ -286,21 +290,22 @@ def create_database (driver, database, username = None, password = None, hostnam
 
 class DBOutputDevice (OutputDevice):
 
-    def __init__ (self, options):
+    def __init__ (self):
+        config = Config ()
         self.cnn = self.cursor = None
 
         try:
-            self.db = create_database (options.db_driver,
-                                       options.db_database,
-                                       options.db_user,
-                                       options.db_password,
-                                       options.db_hostname)
+            self.db = create_database (config.db_driver,
+                                       config.db_database,
+                                       config.db_user,
+                                       config.db_password,
+                                       config.db_hostname)
         except AccessDenied, e:
             raise OutputDeviceError ("Error creating database: %s" % e.message)
         except DatabaseNotFound:
-            raise OutputDeviceError ("Database %s doesn't exist. It must be created before running guilty" % options.db_database)
+            raise OutputDeviceError ("Database %s doesn't exist. It must be created before running guilty" % config.db_database)
         except DatabaseDriverNotSupported:
-            raise OutputDeviceError ("Database driver %s is not supported by guilty" % options.db_driver)
+            raise OutputDeviceError ("Database driver %s is not supported by guilty" % config.db_driver)
         except Exception, e:
             raise OutputDeviceError ("Database error: %s" % (str(e)))
 

@@ -21,10 +21,11 @@ from repositoryhandler.backends import create_repository, create_repository_from
 from repositoryhandler.backends.watchers import LS, BLAME
 from Parser import create_parser, ParserUnknownError
 from OutputDevs import create_output_device, OutputDeviceError, OutputDeviceUnknownError
-from optparse import OptionParser
+from optparse import OptionParser, Values
 from utils import uri_is_remote, uri_to_filename, svn_uri_is_file, printerr
 from _config import *
 import os
+from Config import Config
 
 def blame (filename, args):
     repo, uri, out, opts = args
@@ -118,13 +119,26 @@ def main (args):
                        help='Output type [text|db|xml|csv] (%default)')
     add_outputs_options (parser)
 
-    options, args = parser.parse_args(args)
+    # Save default values and pass an emtpy Values object to
+    # parser_args, so that default values are not set. We need it
+    # to know whether a value has been provided by the user or not
+    # After parsing the command line we complete the config options
+    # with the default values for the options that have not been set
+    # by the parser or by a config file
+    defaults = parser.get_default_values ()
+    options, args = parser.parse_args (args, values = Values())
+
+    config = Config ()
+    config.update (options.__dict__)
+    config.add (defaults.__dict__)
+
+    parser.destroy ()
 
     if not args:
         parser.error("missing required repository URI")
         return 1
 
-    if options.debug:
+    if config.debug:
         import repositoryhandler.backends
         repositoryhandler.backends.DEBUG = True
 
@@ -166,15 +180,15 @@ def main (args):
     del p
 
     try:
-        out = create_output_device (options.output, options)
+        out = create_output_device (config.output)
     except OutputDeviceUnknownError:
-        printerr ("Output type %s is not supported by guilty", (options.output,))
+        printerr ("Output type %s is not supported by guilty", (config.output,))
         return 1
     except OutputDeviceError, e:
         printerr (str(e))
         return 1
     except Exception, e:
-        printerr ("Unknown error creating output %s: %s", (options.output,str(e)))
+        printerr ("Unknown error creating output %s: %s", (config.output, str(e)))
         return 1
 
     try:
@@ -187,22 +201,22 @@ def main (args):
         for file in files:
             blame (file, (repo, path or uri, out))
     elif path and os.path.isfile (path):
-        blame (os.path.basename (path), (repo, os.path.dirname (path), out, options))
+        blame (os.path.basename (path), (repo, os.path.dirname (path), out, config))
     elif not path and svn_uri_is_file (uri):
-        blame (os.path.basename (uri), (repo, os.path.dirname (uri), out, options))
+        blame (os.path.basename (uri), (repo, os.path.dirname (uri), out, config))
     else:
         if repo.get_type () == 'cvs':
             # CVS ls doesn't build the paths,
             # so we have to do it before calling blame
             cdir = [""]
-            repo.add_watch (LS, cvs_proxy_blame, (repo, path or uri, out, options, cdir))
+            repo.add_watch (LS, cvs_proxy_blame, (repo, path or uri, out, config, cdir))
         elif repo.get_type () == 'git':
             # In git paths are relative to the root
             # we want paths relative to the provided uri
-            repo.add_watch (LS, git_proxy_blame, (repo, path or uri, out, options))
+            repo.add_watch (LS, git_proxy_blame, (repo, path or uri, out, config))
         else:
-            repo.add_watch (LS, blame, (repo, path or uri, out, options))
-        repo.ls (path or uri, options.revision)
+            repo.add_watch (LS, blame, (repo, path or uri, out, config))
+        repo.ls (path or uri, config.revision)
 
     out.end ()
 

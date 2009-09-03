@@ -31,9 +31,6 @@ class OutputDeviceUnknownError (Exception):
 
 class OutputDevice:
 
-    def __init__ (self, options):
-        pass
-
     def begin (self, uri):
         pass
 
@@ -70,6 +67,6 @@ def _get_output_device (name):
 
     return _devs[name]
 
-def create_output_device (name, opts):
+def create_output_device (name):
     klass = _get_output_device (name)
-    return klass (opts)
+    return klass ()

@@ -18,17 +18,16 @@
 #
 
 from Guilty.OutputDevs import OutputDevice, register_output_device
+from Guilty.Config import Config
 
 class XMLOutputDevice (OutputDevice):
 
-    def __init__ (self, options):
-        self.rev = options.revision
-
     def begin (self, uri):
+        rev = Config ().revision
         print '<?xml version="1.0"?>'
         print '<repository uri = "%s"' % (uri),
-        if self.rev:
-            print 'revision = "%s"' % (self.rev),
+        if rev:
+            print 'revision = "%s"' % (rev),
         print '>'
 
     def start_file (self, filename):
