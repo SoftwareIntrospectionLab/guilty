@@ -176,7 +176,7 @@ def main (args):
         return 1
 
     try:
-        out.begin ()
+        out.begin (path or uri)
     except OutputDeviceError, e:
         printerr (str(e))
         return 1

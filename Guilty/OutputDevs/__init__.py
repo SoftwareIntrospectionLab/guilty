@@ -34,7 +34,7 @@ class OutputDevice:
     def __init__ (self, options):
         pass
 
-    def begin (self):
+    def begin (self, uri):
         pass
 
     def start_file (self, filename):

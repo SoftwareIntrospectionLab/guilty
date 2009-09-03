@@ -304,7 +304,7 @@ class DBOutputDevice (OutputDevice):
         except Exception, e:
             raise OutputDeviceError ("Database error: %s" % (str(e)))
 
-    def begin (self):
+    def begin (self, uri):
         self.cnn = self.db.connect ()
         self.cursor = self.cnn.cursor ()
         try:
