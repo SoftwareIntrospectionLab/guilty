@@ -304,6 +304,7 @@ class DBOutputDevice (OutputDevice):
         except Exception, e:
             raise OutputDeviceError ("Database error: %s" % (str(e)))
 
+    def begin (self):
         self.cnn = self.db.connect ()
         self.cursor = self.cnn.cursor ()
         try:
@@ -314,7 +315,7 @@ class DBOutputDevice (OutputDevice):
         except DatabaseException, e:
             raise OutputDeviceError ("Database error: %s" % (str(e)))
 
-    def __del__ (self):
+    def end (self):
         try:
             if self.cnn:
                 self.cnn.close ()
@@ -322,6 +323,7 @@ class DBOutputDevice (OutputDevice):
                 self.cursor.close ()
         except:
             pass
+        self.cnn = self.cursor = None
 
     def __insert_object (self, obj):
         query, args = obj.build_insert ()
