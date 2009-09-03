@@ -5,6 +5,7 @@ guiltydir = $(pyexecdir)/Guilty
 guilty_PYTHON = 	\
 	__init__.py	\
 	Blame.py	\
+	Config.py	\
 	main.py		\
 	utils.py
 
