@@ -31,6 +31,8 @@ AM_CONDITIONAL(HAVE_STORM, test x$have_storm = xyes)
 AC_CONFIG_FILES([
 Makefile
 Guilty/Makefile
+Guilty/OutputDevs/Makefile
+Guilty/Parser/Makefile
 ])
 AC_OUTPUT
 
