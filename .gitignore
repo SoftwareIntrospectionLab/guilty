@@ -13,4 +13,4 @@ missing
 py-compile
 INSTALL
 guilty
-Guilty/config.py
+Guilty/_config.py

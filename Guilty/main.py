@@ -23,7 +23,7 @@ from Parser import create_parser, ParserUnknownError
 from OutputDevs import create_output_device, OutputDeviceError, OutputDeviceUnknownError
 from optparse import OptionParser
 from utils import uri_is_remote, uri_to_filename, svn_uri_is_file, printerr
-from config import *
+from _config import *
 import os
 
 def blame (filename, args):

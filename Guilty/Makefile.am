@@ -8,12 +8,12 @@ guilty_PYTHON = 	\
 	main.py		\
 	utils.py
 
-CLEANFILES = config.py
-EXTRA_DIST = config.py.in
+CLEANFILES = _config.py
+EXTRA_DIST = _config.py.in
 
-all-local: config.py
+all-local: _config.py
 
-config.py: config.py.in
+_config.py: _config.py.in
 	sed							\
 		-e s!\@PACKAGE_NAME\@!$(PACKAGE_NAME)!		\
 		-e s!\@PACKAGE_VERSION\@!$(PACKAGE_VERSION)!	\
