@@ -34,26 +34,30 @@ def _check_and_store (option, opt_str, value, parser):
     setattr (parser.values, option.dest, value)
 
 def add_options (parser):
-    parser.add_option ('--db-driver', dest='db_driver', type=str,
-                       action="callback", callback=_check_and_store,
-                       default='mysql', metavar='driver',
-                       help="Output database driver [mysql|sqlite] (%default)")
-    parser.add_option ('-u', '--db-user', dest='db_user', type=str,
-                       action="callback", callback=_check_and_store,
-                       default='operator', metavar='user',
-                       help="Database user name (%default)")
-    parser.add_option ('-p', '--db-password', dest='db_password', type=str,
-                       action="callback", callback=_check_and_store,
-                       metavar='password',
-                       help="Database user password")
-    parser.add_option ('-d', '--db-database', dest='db_database', type=str,
-                       action="callback", callback=_check_and_store,
-                       default='guilty', metavar='database',
-                       help="Database name (%default)")
-    parser.add_option ('-H', '--db-hostname', dest='db_hostname', type=str,
-                       action="callback", callback=_check_and_store,
-                       default='localhost', metavar='host',
-                       help="Name of the host where database server is running (%default)")
+    from optparse import OptionGroup
+
+    group = OptionGroup (parser, "Database Options")
+    group.add_option ('--db-driver', dest='db_driver', type=str,
+                      action="callback", callback=_check_and_store,
+                      default='mysql', metavar='driver',
+                      help="Output database driver [mysql|sqlite] (%default)")
+    group.add_option ('-u', '--db-user', dest='db_user', type=str,
+                      action="callback", callback=_check_and_store,
+                      default='operator', metavar='user',
+                      help="Database user name (%default)")
+    group.add_option ('-p', '--db-password', dest='db_password', type=str,
+                      action="callback", callback=_check_and_store,
+                      metavar='password',
+                      help="Database user password")
+    group.add_option ('-d', '--db-database', dest='db_database', type=str,
+                      action="callback", callback=_check_and_store,
+                      default='guilty', metavar='database',
+                      help="Database name (%default)")
+    group.add_option ('-H', '--db-hostname', dest='db_hostname', type=str,
+                      action="callback", callback=_check_and_store,
+                      default='localhost', metavar='host',
+                      help="Name of the host where database server is running (%default)")
+    parser.add_option_group (group)
 
 
 class DatabaseException (Exception):
