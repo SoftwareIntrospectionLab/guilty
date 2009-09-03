@@ -23,6 +23,7 @@ from Parser import create_parser, ParserUnknownError
 from OutputDevs import create_output_device, OutputDeviceError, OutputDeviceUnknownError
 from optparse import OptionParser
 from utils import uri_is_remote, uri_to_filename, svn_uri_is_file, printerr
+from config import *
 import os
 
 def blame (filename, args):
@@ -100,7 +101,8 @@ def add_outputs_options (parser):
 
 def main (args):
     parser = OptionParser (usage='%prog [ options ... ] URI [ FILES ]',
-                           description='Analyze repository modifications')
+                           description='Analyze repository modifications',
+                           version=VERSION)
     parser.disable_interspersed_args()
     parser.add_option ('-g', '--debug', dest='debug',
                        action="store_true", default=False,
