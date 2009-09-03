@@ -19,6 +19,9 @@
 import sys
 import re
 
+from Config import Config
+config = Config ()
+
 def to_utf8 (string):
     if isinstance (string, unicode):
         return string.encode ('utf-8')
@@ -79,6 +82,8 @@ def printerr (str = '\n', args = None):
     sys.stderr.flush ()
 
 def printdbg (str = '\n', args = None):
+    if not config.debug:
+        return
     printout ("DBG: " + str, args)
 
 
