@@ -42,7 +42,7 @@ class GitParser (Parser):
         bl = BlameLine ()
         bl.line = int (match.group (5))
         bl.rev = match.group (1)
-        bl.author = match.group (3)
+        bl.author = match.group (3).strip ()
         bl.date = datetime.datetime (* (time.gmtime (int (match.group (4)))[0:6]))
         filename = match.group (2)
         if filename != self.filename:
