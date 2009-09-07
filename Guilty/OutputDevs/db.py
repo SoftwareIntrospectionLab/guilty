@@ -324,6 +324,9 @@ class DBOutputDevice (OutputDevice):
         except DatabaseException, e:
             raise OutputDeviceError ("Database error: %s" % (str(e)))
 
+        self.authors = {}
+        self.revisions = {}
+
     def end (self):
         try:
             if self.cnn:
@@ -333,6 +336,8 @@ class DBOutputDevice (OutputDevice):
         except:
             pass
         self.cnn = self.cursor = None
+        del self.revisions
+        del self.authors
 
     def __insert_object (self, obj):
         query, args = obj.build_insert ()
@@ -341,22 +346,18 @@ class DBOutputDevice (OutputDevice):
         return obj
 
     def __get_revision_id (self, revision):
-        query = "select id from revisions where revision = ?"
-        self.cursor.execute (statement (query, self.db.place_holder), (revision,))
-        rs = self.cursor.fetchone ()
-        if not rs:
-            return self.__insert_object (DBRevision (revision)).id
-        else:
-            return rs[0]
+        try:
+            return self.revisions[revision]
+        except KeyError:
+            self.revisions[revision] = self.__insert_object (DBRevision (revision)).id
+            return self.revisions[revision]
 
     def __get_author_id (self, author):
-        query = "select id from authors where name = ?"
-        self.cursor.execute (statement (query, self.db.place_holder), (author,))
-        rs = self.cursor.fetchone ()
-        if not rs:
-            return self.__insert_object (DBAuthor (author)).id
-        else:
-            return rs[0]
+        try:
+            return self.authors[author]
+        except KeyError:
+            self.authors[author] = self.__insert_object (DBAuthor (author)).id
+            return self.authors[author]
 
     def start_file (self, filename):
         self.file_id = self.__insert_object (DBFile (filename)).id
