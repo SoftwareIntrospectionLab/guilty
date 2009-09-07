@@ -51,18 +51,13 @@ class SVNParser (Parser):
 register_parser ('svn', SVNParser)
 
 if __name__ == '__main__':
-    import sys, os
-    from Guilty.TextOutputDevice import TextOutputDevice
-    from Guilty.Command import Command
+    import sys
+    from repositoryhandler.backends import create_repository_from_path
+    from Guilty.Parser import test_parser
 
-    uri = sys.argv[1]
-    p = SVNParser (os.path.basename (uri))
-    p.set_output_device (TextOutputDevice ())
+    repo = create_repository_from_path (sys.argv[1])
+    filename = sys.argv[1]
+    p = SVNParser (filename)
+    test_parser (p, repo)
 
-    def feed (line):
-        p.feed (line)
-
-    cmdline = ['svn', 'blame', '-v', uri]
-    cmd = Command (cmdline)
-    cmd.run (parser_out_func = feed)
 

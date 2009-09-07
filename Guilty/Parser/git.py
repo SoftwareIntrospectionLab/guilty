@@ -53,18 +53,13 @@ class GitParser (Parser):
 register_parser ('git', GitParser)
 
 if __name__ == '__main__':
-    import sys, os
-    from Guilty.TextOutputDevice import TextOutputDevice
-    from Guilty.Command import Command
+    import sys
+    from repositoryhandler.backends import create_repository_from_path
+    from Guilty.Parser import test_parser
 
+    repo = create_repository_from_path (sys.argv[1])
     filename = sys.argv[1]
     p = GitParser (filename)
-    p.set_output_device (TextOutputDevice ())
+    test_parser (p, repo)
 
-    def feed (line):
-        p.feed (line)
-
-    cmdline = ['git', 'blame', '--root', '-l', '-t', '-f', '-M', '-C', os.path.basename (filename)]
-    cmd = Command (cmdline, os.path.dirname (filename))
-    cmd.run (parser_out_func = feed)
 

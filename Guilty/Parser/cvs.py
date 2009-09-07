@@ -56,18 +56,13 @@ class CVSParser (Parser):
 register_parser ('cvs', CVSParser)
 
 if __name__ == '__main__':
-    import sys, os
-    from Guilty.TextOutputDevice import TextOutputDevice
-    from Guilty.Command import Command
+    import sys
+    from repositoryhandler.backends import create_repository_from_path
+    from Guilty.Parser import test_parser
 
+    repo = create_repository_from_path (sys.argv[1])
     filename = sys.argv[1]
-    p = CVSParser (os.path.basename (filename))
-    p.set_output_device (TextOutputDevice ())
+    p = CVSParser (filename)
+    test_parser (p, repo)
 
-    def feed (line):
-        p.feed (line)
-
-    cmdline = ['cvs', 'annotate', os.path.basename (filename)]
-    cmd = Command (cmdline, os.path.dirname (filename))
-    cmd.run (parser_out_func = feed)
 

@@ -75,3 +75,33 @@ def _get_parser (name):
 def create_parser (name, filename):
     klass = _get_parser (name)
     return klass (filename)
+
+def test_parser (p, repo):
+    from Guilty.OutputDevs import OutputDevice
+    from repositoryhandler.backends import create_repository_from_path
+    from repositoryhandler.backends.watchers import BLAME
+
+    class TestOutputDev (OutputDevice):
+        def __init__ (self):
+            self.n_line = 0
+
+        def start_file (self, filename):
+            pass
+        def end_file (self):
+            pass
+
+        def line (self, line):
+            self.n_line = line.line
+            print line
+
+    p.set_output_device (TestOutputDev ())
+
+    def feed (line, p):
+        p.feed (line)
+        if p.n_line != p.out.n_line:
+            import sys
+            print "Error: line mismatch %d - %d" % (p.n_line, p.out.n_line)
+            sys.exit (1)
+
+    repo.add_watch (BLAME, feed, p)
+    repo.blame (p.filename)
