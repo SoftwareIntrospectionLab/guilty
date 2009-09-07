@@ -16,6 +16,7 @@
 #
 # Authors: Carlos Garcia Campos <carlosgc@libresoft.es>
 
+import os
 import sys
 import re
 
@@ -49,9 +50,9 @@ def uri_to_filename (uri):
         return None
 
     if uri.startswith ("file://"):
-        return uri[uri.find ("file://") + len ("file://"):]
+        uri = uri[uri.find ("file://") + len ("file://"):]
 
-    return uri
+    return os.path.abspath (uri)
 
 def svn_uri_is_file (uri):
     from repositoryhandler.backends.svn import get_info
