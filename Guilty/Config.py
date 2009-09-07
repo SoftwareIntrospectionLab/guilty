@@ -24,7 +24,7 @@ class Config:
     __shared_state = {}
 
     def __init__ (self, init=None):
-        if self.__shared_state:
+        if self.__shared_state and not init:
             self.__dict__ = self.__shared_state
             return
 
@@ -41,7 +41,11 @@ class Config:
             if os.path.isfile (config_file):
                 self.__load_from_file (config_file)
         else:
-            self.__load_from_file (init)
+            import os
+
+            if os.path.isfile (init):
+                self.__shared_state.clear ()
+                self.__load_from_file (init)
 
         self.__dict__ = self.__shared_state
 

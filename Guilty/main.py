@@ -108,6 +108,9 @@ def main (args):
     parser.add_option ('-g', '--debug', dest='debug',
                        action="store_true", default=False,
                        help="Run in debug mode")
+    parser.add_option ('-c', '--config-file', dest='config_file',
+                       metavar='FILE',
+                       help="Use a custom configuration file")
     parser.add_option ('-r', '--revision', dest='revision',
                        metavar='REV',
                        help='Revision to analyze (HEAD)')
@@ -128,7 +131,11 @@ def main (args):
     defaults = parser.get_default_values ()
     options, args = parser.parse_args (args, values = Values())
 
-    config = Config ()
+    try:
+        config = Config (options.config_file)
+    except AttributeError:
+        config = Config ()
+
     config.update (options.__dict__)
     config.add (defaults.__dict__)
 
