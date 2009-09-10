@@ -100,6 +100,18 @@ def add_outputs_options (parser):
         except AttributeError:
             continue
 
+def split_filename_path (repo, path):
+    if repo.get_type () == 'git':
+        root = path
+        while not os.path.isdir (os.path.join (root, ".git")):
+            root = os.path.dirname (root)
+        filename = path[len (root):].strip ('/')
+    else:
+        root = os.path.dirname (path)
+        filename = os.path.basename (path)
+
+    return root, filename
+
 def main (args):
     parser = OptionParser (usage='%prog [ options ... ] URI [ FILES ]',
                            description='Analyze repository modifications',
@@ -208,7 +220,8 @@ def main (args):
         for file in files:
             blame (file, (repo, path or uri, out))
     elif path and os.path.isfile (path):
-        blame (os.path.basename (path), (repo, os.path.dirname (path), out, config))
+        root, filename = split_filename_path (repo, path)
+        blame (filename, (repo, root, out, config))
     elif not path and svn_uri_is_file (uri):
         blame (os.path.basename (uri), (repo, os.path.dirname (uri), out, config))
     else:
