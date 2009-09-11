@@ -87,4 +87,30 @@ def printdbg (str = '\n', args = None):
         return
     printout ("DBG: " + str, args)
 
+def read_from_stdin (cb = None, user_data = None):
+    import select, errno
+
+    read_set = [sys.stdin]
+
+    data = ""
+    while read_set:
+        try:
+            rlist, wlist, xlist = select.select (read_set, [], [], 0)
+        except select.error, e:
+            # Ignore interrupted system call, reraise anything else
+            if e.args[0] == errno.EINTR:
+                continue
+            raise
+
+        if sys.stdin in rlist:
+            chunk = os.read (sys.stdin.fileno (), 1024)
+            if not chunk:
+                sys.stdin.close ()
+                read_set.remove (sys.stdin)
+
+            data += chunk
+            while '\n' in data:
+                pos = data.find ('\n')
+                cb (data[:pos + 1], user_data)
+                data = data[pos + 1:]
 

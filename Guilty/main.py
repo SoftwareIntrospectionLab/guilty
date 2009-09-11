@@ -22,9 +22,9 @@ from repositoryhandler.backends.watchers import LS, BLAME
 from Parser import create_parser, ParserUnknownError
 from OutputDevs import create_output_device, OutputDeviceError, OutputDeviceUnknownError
 from optparse import OptionParser, Values
-from utils import uri_is_remote, uri_to_filename, svn_uri_is_file, printerr
+from utils import uri_is_remote, uri_to_filename, svn_uri_is_file, printerr, read_from_stdin
 from _config import *
-import os
+import os, sys
 from Config import Config
 
 def blame (filename, args):
@@ -163,9 +163,7 @@ def main (args):
 
     uri = args[0]
     files = args[1:]
-    if files and files[0] == '-':
-        # TODO: Read files from stdin
-        pass
+    files_from_stdin = (files and files[0] == '-')
 
     # Create repository
     path = uri_to_filename (uri)
@@ -216,7 +214,9 @@ def main (args):
         printerr (str(e))
         return 1
 
-    if files:
+    if files_from_stdin:
+        read_from_stdin (blame, (repo, path or uri, out, config))
+    elif files:
         for file in files:
             blame (file, (repo, path or uri, out, config))
     elif path and os.path.isfile (path):
