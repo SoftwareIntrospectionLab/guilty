@@ -151,11 +151,11 @@ def main (args):
     config.update (options.__dict__)
     config.add (defaults.__dict__)
 
-    parser.destroy ()
-
     if not args:
         parser.error("missing required repository URI")
         return 1
+
+    parser.destroy ()
 
     if config.debug:
         import repositoryhandler.backends
