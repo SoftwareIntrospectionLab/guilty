@@ -218,7 +218,7 @@ def main (args):
 
     if files:
         for file in files:
-            blame (file, (repo, path or uri, out))
+            blame (file, (repo, path or uri, out, config))
     elif path and os.path.isfile (path):
         root, filename = split_filename_path (repo, path)
         blame (filename, (repo, root, out, config))
