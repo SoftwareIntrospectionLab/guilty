@@ -1,0 +1,83 @@
+.TH GUILTY 1 "14 Sep 2009"
+.SH NAME
+\fBGuilty\fP \- Analyze repository modifications
+.SH SYNOPSIS
+.B guilty
+.RI [ options ... ] URI [ FILES ]
+.SH DESCRIPTION
+URI is the only required parameter and can be a checked out directory,
+or a remote URL pointing to a repository. Guilty will analyze the list
+of files provided after the URI or it will read files from stdin if
+'-' is used instead of filenames. File paths should be relative to the
+given repository URI. When analyzing a single file the URI can point
+directly to such a file omitting then the file list. If no files are
+provided and URI points to a directory, all the files contained in the
+directory (and recursively in its subdirectories) will be
+analyzed.
+
+.LP
+.SH OPTIONS
+
+.TP
+\fB\-h \-\-help\fR
+Show help information and exit
+
+.TP
+\fB\-\-version\fR
+Show program's version number and exit
+
+.TP
+\fB\-g \-\-debug\fR
+Run in debug mode
+
+.TP
+\fB\-c <FILE> \-\-config\-file=<FILE>\fR
+Use a custom configuration file
+
+.TP
+\fB\-r <REV> \-\-revision=<REV> [default: HEAD]\fR
+Revision to analyze
+
+.TP
+\fB\-f \-\-fast\fR
+Run faster but moves and copies are not detected
+
+.TP
+\fB\-o <OUTPUT> \-\-output=<OUTPUT> [default: text]\fR
+Output type. Known types: text, db, xml, csv
+
+.SH DATABASE OPTIONS
+
+.TP
+\fB\-\-db\-driver=<driver> [default: mysql]\fR
+Use the given database system. Known drivers: sqlite, mysql
+
+.TP
+\fB\-u, \-\-db\-user=<username> [default: operator]\fR
+The name of the user to connect to the database system. The given user
+should exist, since Guilty will not try to create any
+user. This option doesn't make sense when using SQLite.
+
+.TP
+\fB\-p, \-\-db\-password=<password>\fR
+The user's password to connect to the database system. If it's not
+provided, you will be prompted to enter it.
+
+.TP
+\fB\-d, \-\-db\-database=<dbname> [default: guilty]\fR
+The name of the database. It should exist, since Guilty will
+not try to create any database. If you are using SQLite, this option might
+be a local path instead of just a name.
+
+.TP
+\fB\-H, \-\-db\-hostname=<hostname> [default: localhost]\fR
+The host name where database system is running. This option doesn't
+make sense when using SQLite.
+
+.SH MAILING LIST
+.sp
+.B
+libresoft-tools-devel@lists.morfeo-project.org
+
+.SH AUTHOR
+LibreSoft: http://libresoft.es

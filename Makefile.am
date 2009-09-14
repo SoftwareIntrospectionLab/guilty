@@ -6,10 +6,13 @@ guilty: guilty.in
 	sed -e s!\@pyexecdir\@!@pyexecdir@! < $< > $@
 	chmod a+x $@
 
+man_MANS=guilty.1
+
 EXTRA_DIST = 		\
 	COPYING		\
 	README		\
-	guilty.in
+	guilty.in	\
+	$(man_MANS)
 
 CLEANFILES = guilty
 
