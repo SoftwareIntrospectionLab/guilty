@@ -17,7 +17,8 @@
 # Authors: Carlos Garcia Campos <carlosgc@libresoft.es>
 #
 
-from repositoryhandler.backends import create_repository, create_repository_from_path, RepositoryUnknownError
+from repositoryhandler.backends import (create_repository, create_repository_from_path,
+                                        RepositoryUnknownError, RepositoryCommandError)
 from repositoryhandler.backends.watchers import LS, BLAME
 from Parser import create_parser, ParserUnknownError
 from OutputDevs import create_output_device, OutputDeviceError, OutputDeviceUnknownError
@@ -41,9 +42,12 @@ def blame (filename, args):
         p.feed (line)
 
     wid = repo.add_watch (BLAME, feed, p)
-    repo.blame (os.path.join (uri, filename),
-                rev = opts.revision,
-                mc = not opts.fast)
+    try:
+        repo.blame (os.path.join (uri, filename),
+                    rev = opts.revision,
+                    mc = not opts.fast)
+    except RepositoryCommandError, e:
+        printerr ("Error getting blame information of path '%s': %s", (filename, e.error))
     p.end ()
     repo.remove_watch (BLAME, wid)
 
