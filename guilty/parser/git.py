@@ -21,8 +21,8 @@ if __name__ == '__main__':
     import sys
     sys.path.insert (0, '../../')
 
-from Guilty.Parser import Parser, register_parser
-from Guilty.Blame import BlameLine
+from guilty.parser import Parser, register_parser
+from guilty.Blame import BlameLine
 
 import re
 import datetime, time

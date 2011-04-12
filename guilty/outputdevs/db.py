@@ -17,10 +17,10 @@
 # Authors: Carlos Garcia Campos <carlosgc@libresoft.es>
 #
 
-from Guilty.OutputDevs import OutputDevice, register_output_device, OutputDeviceError
+from guilty.outputdevs import OutputDevice, register_output_device, OutputDeviceError
 from optparse import OptionValueError
-from Guilty.utils import to_utf8, printdbg
-from Guilty.Config import Config
+from guilty.utils import to_utf8, printdbg
+from guilty.Config import Config
 
 def _check_and_store (option, opt_str, value, parser):
     try:

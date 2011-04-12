@@ -20,8 +20,8 @@
 from repositoryhandler.backends import (create_repository, create_repository_from_path,
                                         RepositoryUnknownError, RepositoryCommandError)
 from repositoryhandler.backends.watchers import LS, BLAME
-from Parser import create_parser, ParserUnknownError
-from OutputDevs import create_output_device, OutputDeviceError, OutputDeviceUnknownError
+from parser import create_parser, ParserUnknownError
+from outputdevs import create_output_device, OutputDeviceError, OutputDeviceUnknownError
 from optparse import OptionParser, Values
 from utils import uri_is_remote, uri_to_filename, svn_uri_is_file, printerr, read_from_stdin
 from _config import *

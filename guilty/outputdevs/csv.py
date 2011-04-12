@@ -17,7 +17,7 @@
 # Authors: Carlos Garcia Campos <carlosgc@libresoft.es>
 #
 
-from Guilty.OutputDevs import OutputDevice, register_output_device
+from guilty.outputdevs import OutputDevice, register_output_device
 
 class CSVOutputDevice (OutputDevice):
 
