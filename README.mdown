@@ -1,28 +1,33 @@
+Guilty
+======
+Description
+-----------
 Guilty is a tool to extract blame command information from SCM
 repositories.
 
 It supports multiple SCM repositories and can provide the information in
 different output formats:
 
- - text: mainly for testing and debugging
- - database: useful for easy querying and generate reports
- - xml: to be used as input for other programs
- - csv: spreadsheet compatible format
+* text: mainly for testing and debugging
+* database: useful for easy querying and generate reports
+* xml: to be used as input for other programs
+* csv: spreadsheet compatible format
 
 For every line of every file guilty provides the following
 information:
 
- - line number:
- - revision: the last revision the line was modified
- - author: the last person who modified the line
- - date: the date of the last modification
- - file: the original file where the line was modified. This value
+* line number
+* revision: the last revision the line was modified
+* author: the last person who modified the line
+* date: the date of the last modification
+* file: the original file where the line was modified. This value
    will be present only when the line was copied or moved from one
    file to another
 
-Usage:
+Usage
+-----
 
-guilty [options...] URI [files]
+    guilty [options...] URI [files]
 
 URI is the only required parameter and can be a checked out directory,
 or a remote URL pointing to a repository. Guilty will analyze the list
@@ -36,7 +41,7 @@ analyzed.
 
 Common options:
 
- -o, --output: output type (text, db, xml, csv)
- -r, --revision: the revision to analyze
- -f, --fast: run faster but moves and copies are not detected
+* -o, --output: output type (text, db, xml, csv)
+* -r, --revision: the revision to analyze
+* -f, --fast: run faster but moves and copies are not detected
 
