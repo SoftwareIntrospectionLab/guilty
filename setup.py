@@ -26,7 +26,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name = "Guilty",
+    name = "guilty",
     version = "2.0",
     author = "Chris Lewis",
     author_email = "cflewis@soe.ucsc.edu",
