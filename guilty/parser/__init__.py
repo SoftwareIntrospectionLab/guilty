@@ -24,7 +24,7 @@ __all__ = [
 ]
 
 class ParserUnknownError (Exception):
-    '''Unkown parser type'''
+    '''Unknown parser type'''
 
 class Parser:
 
@@ -59,7 +59,7 @@ def _get_parser (name):
     error = None
     if name not in _parsers:
         try:
-            __import__ ('Guilty.Parser.%s' % name)
+            __import__ ('guilty.parser.%s' % name)
         except ImportError, e:
             error = e
 

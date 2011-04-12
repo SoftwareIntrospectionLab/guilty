@@ -27,7 +27,7 @@ class OutputDeviceError (Exception):
     '''Generic OutputDeviceError'''
 
 class OutputDeviceUnknownError (Exception):
-    '''Unkown output device type'''
+    '''Unknown output device type'''
 
 class OutputDevice:
 
@@ -54,7 +54,7 @@ def _get_output_device (name):
     error = None
     if name not in _devs:
         try:
-            __import__ ('Guilty.OutputDevs.%s' % name)
+            __import__ ('guilty.outputdevs.%s' % name)
         except ImportError, e:
             error = e
 
