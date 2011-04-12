@@ -33,7 +33,7 @@ setup(
     description = ("A tool to extract blame command information from SCM repositories"),
     license = "GPL version 2",
     keywords = "cvs svn git source sourcecontrol scm",
-    url = "https://github.com/SoftwareIntrospectionLab/Guilty",
+    url = "https://github.com/SoftwareIntrospectionLab/guilty",
     packages=['guilty', 'guilty.parser'],
     long_description=read('README.mdown'),
     scripts = ["guilty.py"],
