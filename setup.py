@@ -34,9 +34,9 @@ setup(
     license = "GPL version 2",
     keywords = "cvs svn git source sourcecontrol scm",
     url = "https://github.com/SoftwareIntrospectionLab/guilty",
-    packages=['guilty', 'guilty.parser'],
+    packages=['guilty', 'guilty.parser', 'guilty.outputdevs'],
     long_description=read('README.mdown'),
-    scripts = ["guilty.py"],
+    #scripts = ["guilty.py"],
     classifiers = [
         "Development Status :: 4 - Beta",
         "Topic :: Software Development :: Version Control",
@@ -44,4 +44,5 @@ setup(
         "Environment :: Console"
     ],
 )
+
 
