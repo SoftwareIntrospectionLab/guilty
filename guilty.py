@@ -20,11 +20,11 @@
 import sys
 
 try:
-    from Guilty.main import main
+    from guilty.main import main
 except ImportError:
     if not "@pyexecdir@" in sys.path:
         sys.path.insert (0, "@pyexecdir@")
-    from Guilty.main import main
+    from guilty.main import main
 
 retval = main (sys.argv[1:])
 sys.exit (retval)
