@@ -71,7 +71,7 @@ class AccessDenied (DatabaseException):
 class TableAlreadyExists (DatabaseException):
     '''Table alredy exists in database'''
 
-class DBObject:
+class DBObject(object):
 
     def build_insert (self):
         query = "INSERT INTO %s (" % self.__table__
@@ -138,7 +138,7 @@ def statement (str, ph_mark):
 
     return retval
 
-class Database:
+class Database(object):
 
     place_holder = "?"
 

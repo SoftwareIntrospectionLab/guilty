@@ -26,7 +26,7 @@ __all__ = [
 class ParserUnknownError (Exception):
     '''Unknown parser type'''
 
-class Parser:
+class Parser(object):
 
     def __init__ (self, filename):
         self.filename = filename

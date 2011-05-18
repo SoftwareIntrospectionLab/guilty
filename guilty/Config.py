@@ -20,7 +20,7 @@
 class ErrorLoadingConfig (Exception):
     '''Error loading configuration options'''
 
-class Config:
+class Config(object):
     __shared_state = {}
 
     def __init__ (self, init=None):

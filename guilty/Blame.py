@@ -17,7 +17,7 @@
 # Authors: Carlos Garcia Campos <carlosgc@libresoft.es>
 #
 
-class BlameLine:
+class BlameLine(object):
     def __init__ (self):
         self.__dict__ = { 'line'   : None,
                           'rev'    : None,

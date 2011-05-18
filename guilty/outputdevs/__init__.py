@@ -29,7 +29,7 @@ class OutputDeviceError (Exception):
 class OutputDeviceUnknownError (Exception):
     '''Unknown output device type'''
 
-class OutputDevice:
+class OutputDevice(object):
 
     def begin (self, uri):
         pass
