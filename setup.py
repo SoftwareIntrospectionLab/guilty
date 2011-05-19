@@ -21,13 +21,13 @@ import os
 from setuptools import setup
 
 # Utility function to read the README file.
-# Used for the long_description. 
+# Used for the long_description.
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
     name = "guilty",
-    version = "2.0",
+    version = "2.0.1",
     author = "Chris Lewis",
     author_email = "cflewis@soe.ucsc.edu",
     description = ("A tool to extract blame command information from SCM repositories"),
