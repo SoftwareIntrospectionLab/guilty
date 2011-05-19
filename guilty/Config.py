@@ -65,7 +65,7 @@ class Config(object):
         return self.__dict__[attr]
 
     def __setattr__ (self, attr, value):
-        self.__dict__[attr] = value
+        object.__setattr__(self, attr, value)
 
     def __str__ (self):
         return "Config %r" % (self.__dict__)

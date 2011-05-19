@@ -38,7 +38,7 @@ class BlameLine(object):
         return self.__dict__[name]
 
     def __setattr__ (self, name, value):
-        self.__dict__[name] = value
+        object.__setattr__(self, name, value)
 
     def __str__ (self):
         return "BlameLine %r" % (self.__dict__)
