@@ -29,7 +29,7 @@ import datetime, time
 
 class GitParser (Parser):
 
-    line_pattern = re.compile ("^([^ ]+)[\t ]+([^ ]+)[\t ]+\((.+) ([0-9]+) [+-][0-9][0-9][0-9][0-9][\t ]+([0-9]+)\)[\t ]+.*$")
+    line_pattern = re.compile ("^([a-f|\d]+)[\t ]+(.+)[\t ]+\((.+) ([0-9]+) [+-][0-9]{4}[\t ]+([0-9]+)\)[\t ]+.*$")
 
     def _parse_line (self, line):
         if not line:
