@@ -45,7 +45,8 @@ def blame (filename, args):
     try:
         repo.blame (os.path.join (uri, filename),
                     rev = opts.revision,
-                    mc = not opts.fast)
+                    mc = not opts.fast,
+                    ignore_whitespaces=True)
     except RepositoryCommandError, e:
         printerr ("Error getting blame information of path '%s': %s", (filename, e.error))
     p.end ()
