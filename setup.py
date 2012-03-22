@@ -27,7 +27,7 @@ def read(fname):
 
 setup(
     name = "guilty",
-    version = "2.0.1",
+    version = "2.1",
     author = "Chris Lewis",
     author_email = "cflewis@soe.ucsc.edu",
     description = ("A tool to extract blame command information from SCM repositories"),
